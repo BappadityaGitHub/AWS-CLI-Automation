@@ -1,0 +1,26 @@
+A Shebang (also called a hash-bang) is the combination of the Hash (#) and Exclamation (!) characters at the very first line of a script. [14] [1] 
+It looks like this: #!/bin/bash or #!/usr/bin/python3 [14, 15] [2, 3, 4] 
+## 1. The Logic: What is it?
+In Linux, a file is just a bunch of text. When you tell the computer to "execute" a file (like ./myscript.sh), the computer doesn't automatically know if it’s a Bash script, a Python script, or a Perl script. [15] [5] 
+The Shebang is the instruction manual for the Operating System. It says: "Hey, don't read this yourself; hand this file over to the program located at this path to run it." [15] [6, 7] 
+## 2. Why do we need this?
+Without a shebang, the system will usually try to run the script using your current shell (which might be sh or zsh), but that can lead to errors if your script uses specific features of bash. [14, 15] [8, 9] 
+Key reasons we use it:
+
+* Precision: It ensures the script always runs in the correct environment. [15]
+* Portability: Even if a user is using a different shell (like zsh), the shebang forces the script to run in bash so it doesn't break. [15]
+* Convenience: It allows you to run a script as a standalone program (e.g., ./script.sh) instead of typing the interpreter name every time (e.g., bash script.sh). [15] [10, 11, 12, 13, 14] 
+
+## 3. Understanding the Symbols
+
+* # (Hash): In most scripts, this starts a comment (the computer ignores it). [14]
+* ! (Bang): When placed immediately after the hash at the start of a file, it "wakes up" the system to look for a path. [14]
+* /bin/bash: This is the absolute file path to the Bash interpreter on your EC2 instance. [14, 15] [15, 16, 17, 18, 19] 
+
+------------------------------
+## Pro-Tip for DevOps
+Sometimes paths vary between different Linux servers. To make your scripts even more professional, use this "smart" shebang:
+#!/usr/bin/env bash [20, 21] 
+Logic: This tells the system to search the environment's PATH to find where bash is located, making your script work on almost any Linux machine. [14] [22] 
+Now that you know the shebang, are you ready to write a script that uses a "Variable" to store a piece of data?
+

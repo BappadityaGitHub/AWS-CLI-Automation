@@ -1,0 +1,52 @@
+Section 4 — Vim and Nano
+Q1. Difference between vim and nano?
+vim (Vi IMproved): Powerful, modal editor with normal/insert/command modes. Steep learning curve but extremely fast and powerful once
+mastered. Available on almost every Linux server. Supports advanced features like macros, split windows, plugins. nano: Simple
+beginner-friendly editor. No modes — what you type goes directly into the file. Shows keyboard shortcuts at the bottom of screen. Easier to use
+but less powerful. In DevOps: vim is preferred on production servers as it is always available. nano is better for beginners or quick edits.
+Q2. What are vim modes?
+Vim has three main modes: 1. Normal Mode (default): The mode when you first open vim. You cannot type text. Used for navigation, copying,
+deleting and running commands. Press Esc to return here from any mode. 2. Insert Mode: Press i to enter. The -- INSERT -- indicator appears
+at the bottom. Now you can type and edit text freely. Press Esc to exit back to normal mode. 3. Command Mode: From normal mode press :
+(colon). Used for saving, quitting, search/replace and other operations. Examples: :wq to save and quit, :q! to quit without saving.
+Q3. How do you save and quit in vim?
+Save and quit: :wq (write and quit) or :x (same as :wq). Quit without saving: :q! (the ! forces quit ignoring unsaved changes). Save without
+quitting: :w (write to file and stay in vim). Quit if no changes: :q (only works if file has no unsaved changes). The most important ones to
+memorise: :wq saves and exits, :q! discards changes and exits. Always press Escape first before typing : to ensure you are in normal mode.
+Esc # ensure in normal mode first :wq # save and quit :q! # quit WITHOUT saving :w # save only
+Q4. How to search text in vim?
+In normal mode type /word to search forward for that word. Press n to jump to the next match and N to go to previous match. Type ?word to
+search backward through the file. To replace all occurrences: :%s/oldword/newword/g where % means whole file, s means substitute, g means
+global (all occurrences). To replace with confirmation: :%s/oldword/newword/gc (the c asks for confirmation before each replacement).
+/searchterm # search forward ?searchterm # search backward n # next match N # previous match :%s/old/new/g
+# replace all
+Q5. How to copy and paste in vim?
+In normal mode: yy copies the current line (yank yank). y followed by a number copies multiple lines — 3yy copies 3 lines. dd cuts (deletes) the
+current line. p pastes after the cursor position. P pastes before the cursor position. To copy a word: yw. To copy to end of line: y$. These
+operations work with the internal vim clipboard. For copying between vim and the system clipboard, use +y or *y depending on the system.
+yy # copy current line 3yy # copy 3 lines dd # cut current line p # paste after cursor P # paste before
+cursor
+Q6. What is insert mode in vim?
+Insert mode is the mode in vim where you can actually type and edit text. By default vim opens in normal mode where keypresses are
+commands not text. You enter insert mode by pressing i (insert before cursor), I (insert at beginning of line), a (append after cursor), A (append
+at end of line), o (open new line below), O (open new line above). The -- INSERT -- indicator appears at the bottom of the screen. Press
+Escape to exit insert mode and return to normal mode.
+Q7. How do you undo and redo in vim?
+In normal mode: u undoes the last change. Pressing u multiple times undoes multiple changes step by step. Ctrl+r redoes a change that was
+undone. U undoes all changes on the current line. In DevOps: essential to know when you accidentally delete or overwrite content in a config
+file. vim has a deep undo history so you can undo many levels of changes.
+u # undo last change Ctrl + r # redo U # undo all changes on current line
+Q8. How to open a file using nano?
+To open or create a file with nano: nano filename.txt. If the file exists it opens it for editing. If it does not exist nano creates a new empty file with
+that name. You can also open with line number: nano +15 filename.txt opens at line 15. nano opens immediately in editing mode unlike vim —
+you can start typing right away. The bottom of the screen shows available keyboard shortcuts with ^ meaning Ctrl.
+Q9. How to save and exit nano?
+Save in nano: Ctrl+O (WriteOut) then press Enter to confirm the filename. Exit nano: Ctrl+X. If you have unsaved changes nano asks if you
+want to save — press Y for yes, N for no. Save and exit together: press Ctrl+X and when asked to save press Y then Enter. Other useful
+shortcuts: Ctrl+G for help, Ctrl+K to cut a line, Ctrl+U to paste, Ctrl+W to search for text.
+Q10. When do you prefer vim over nano?
+
+Prefer vim when: working on servers where nano is not installed (vim/vi is almost always available), performing complex edits with search and
+replace across large files, comparing two files side by side with vimdiff, editing multiple files simultaneously, working remotely via SSH where
+vim is standard. Prefer nano when: quick simple edits, beginners who are not yet comfortable with vim modes, editing a single file with no
+complex operations needed. In DevOps interviews vim knowledge is expected.
