@@ -1,0 +1,189 @@
+Good catch! Let me cover that now. 🎯
+
+---
+
+## How to Connect to an EC2 Instance from Git Bash
+
+---
+
+### What You Need Before Connecting
+
+```
+1. Your .pem key file
+   → Downloaded when you created
+     the key pair on AWS
+
+2. Your EC2 Public IP or DNS
+   → Found in AWS Console
+   → Or from CLI:
+     aws ec2 describe-instances \
+     --query 'Reservations[*].Instances[*].PublicIpAddress' \
+     --output text
+
+3. The correct username
+   → Amazon Linux: ec2-user
+   → Ubuntu: ubuntu
+   → RHEL: ec2-user
+   → Debian: admin
+```
+
+---
+
+### Step 1 — Fix Key File Permissions
+
+```
+Before connecting you MUST do this:
+
+chmod 400 MyKeyPair.pem
+
+Why:
+SSH refuses to connect if your
+key file can be read by others.
+400 means only YOU can read it.
+
+This is a one time step per key file.
+```
+
+---
+
+### Step 2 — Connect
+
+```
+ssh -i "MyKeyPair.pem" ec2-user@PUBLIC-IP
+
+Real example:
+ssh -i "MyKeyPair.pem" ec2-user@16.171.224.67
+
+Or using DNS name:
+ssh -i "MyKeyPair.pem" ec2-user@ec2-16-171-224-67.eu-north-1.compute.amazonaws.com
+
+Breaking it down:
+ssh        = secure shell command
+-i         = identity file flag
+"MyKeyPair.pem" = your key file
+ec2-user   = username on the server
+@          = at this address
+16.171...  = your server public IP
+```
+
+---
+
+### Step 3 — First Time Warning
+
+```
+First time connecting you see:
+
+"The authenticity of host can't be established.
+Are you sure you want to continue? (yes/no)"
+
+Type: yes
+Press Enter
+
+This adds the server fingerprint
+to your known hosts file.
+Never appears again for same server.
+```
+
+---
+
+### Step 4 — You Are Inside!
+
+```
+You will see:
+[ec2-user@ip-172-31-x-x ~]$
+
+This means you are now INSIDE
+your EC2 instance. 
+
+Run: pwd
+Output: /home/ec2-user
+
+Run: whoami
+Output: ec2-user
+```
+
+---
+
+### How to Disconnect
+
+```
+Type: exit
+Or press: Ctrl+D
+
+You return to your local
+Git Bash terminal.
+```
+
+---
+
+### Common Connection Errors and Fixes
+
+```
+ERROR: Permission denied (publickey)
+FIX 1: chmod 400 MyKeyPair.pem
+FIX 2: Wrong username — try ubuntu
+        instead of ec2-user
+FIX 3: Wrong key file for that instance
+
+ERROR: Connection timed out
+FIX 1: Security group missing port 22
+        Add inbound rule: SSH port 22
+FIX 2: Instance not running yet
+        Wait and try again
+FIX 3: Wrong IP address
+
+ERROR: WARNING: UNPROTECTED KEY FILE
+FIX: chmod 400 MyKeyPair.pem
+     (permissions too open)
+
+ERROR: Host key verification failed
+FIX: ssh-keygen -R PUBLIC-IP
+     (clears old fingerprint)
+     Then reconnect
+```
+
+---
+
+### Get Connection Details from CLI
+
+```
+Instead of going to AWS Console
+get everything you need from CLI:
+
+aws ec2 describe-instances \
+  --query 'Reservations[*].Instances[*].
+  [InstanceId,State.Name,
+  PublicIpAddress,KeyName]' \
+  --output table
+
+Then connect directly:
+
+INSTANCE_IP=$(aws ec2 describe-instances \
+  --instance-ids i-0abc123 \
+  --query 'Reservations[0].Instances[0].PublicIpAddress' \
+  --output text)
+
+ssh -i "MyKeyPair.pem" ec2-user@$INSTANCE_IP
+```
+
+---
+
+### Quick Reference
+
+```
+Connect:
+ssh -i "MyKeyPair.pem" ec2-user@IP
+
+Fix permissions first:
+chmod 400 MyKeyPair.pem
+
+Disconnect:
+exit
+
+Common usernames:
+Amazon Linux → ec2-user
+Ubuntu       → ubuntu
+RHEL         → ec2-user
+```
+
+Try connecting to your instance now and let me know if you hit any errors! 💪

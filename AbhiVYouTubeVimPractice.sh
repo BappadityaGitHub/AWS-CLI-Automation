@@ -1,6 +1,13 @@
- NewRam NewRam rabm 
+#!/bin/bash
 
- RAm RAM
- NewRam NewRam ko-NewRam deko-NewRam
+#create a folder 
+mkdir BappaAbhiV
+
+#create multiple files
+
+touch 1Bappa 2Bappa
+
+#creating shell script showing a smaple automation to create file folder/directory 
+
  
 #vim and nano commands are explained in other txt file calle VimNanoLearn.text

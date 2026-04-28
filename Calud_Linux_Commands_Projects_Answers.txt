@@ -1,0 +1,333 @@
+Linux Commands — Projects & Answers
+
+Hands-On Practice Guide for AWS Cloud & DevOps Engineers
+
+Every command has a project task and a verified answer. Practice first — then check!
+
+Section 1 — Navigation Commands
+Project 1 — Command: pwd
+Why this command matters: As a Cloud Engineer you always need to know exactly where you are on the server before running any command.
+Running the wrong command in the wrong folder can delete important files.
+Your Task: Connect to your EC2 instance via SSH. Type pwd and note the output. This is your home directory.
+Answer: pwd Expected output: /home/ec2-user This confirms you are in your home directory on the AWS EC2 instance.
+Project 2 — Command: ls and ls -l and ls -la
+Why this command matters: You need to list files to see what exists on your server before making changes. ls -la shows hidden files which is
+critical because important config files like .bashrc are hidden.
+Your Task: Run ls to see basic files. Then run ls -l to see permissions and details. Then run ls -la to see hidden files too. Compare all three
+outputs.
+Answer: ls — shows visible files only ls -l — shows permissions, owner, size, date ls -la — shows everything including hidden files starting
+with dot Hidden files you will see: .bashrc .bash_history .ssh
+Project 3 — Command: cd and cd .. and cd ~
+Why this command matters: Navigation is the most used skill on any server. You move between folders constantly when managing cloud
+servers.
+Your Task: From your home directory: Step 1 — cd into a folder you created. Step 2 — use pwd to confirm location. Step 3 — use cd .. to go
+back. Step 4 — use cd ~ to return home.
+Answer: cd BappaTeluskoClass — enters the folder pwd — shows /home/ec2-user/BappaTeluskoClass cd .. — goes back one level pwd —
+shows /home/ec2-user cd ~ — goes to home directory
+
+Section 2 — File & Folder Management
+Project 4 — Command: mkdir and touch
+Why this command matters: Every Cloud Engineer creates folders to organise server files. Web files, config files, log files all go in specific
+folders. Using touch creates empty files which is useful for testing.
+Your Task: Create a folder called CloudProject. Inside it create three subfolders called WebApp, Database and Logs. Inside WebApp create an
+empty file called index.html. Verify everything with ls -R CloudProject/
+Answer: mkdir CloudProject mkdir CloudProject/WebApp mkdir CloudProject/Database mkdir CloudProject/Logs touch
+CloudProject/WebApp/index.html ls -R CloudProject/ Expected output shows all folders and index.html inside WebApp
+Project 5 — Command: mkdir -p
+Why this command matters: When setting up complex server structures you often need to create multiple nested folders at once. mkdir -p
+creates the entire path in one command saving time.
+Your Task: Create this entire path in one single command: myapp/src/config/aws. Verify it was created using ls -R myapp/
+Answer: mkdir -p myapp/src/config/aws ls -R myapp/ Expected output: myapp/src/config/aws/ All four nested folders created with one
+command!
+Project 6 — Command: cp and cp -r
+
+Why this command matters: Before editing any important config file on a server you always make a backup copy first. This is a critical
+professional habit that saves you when something goes wrong.
+Your Task: Create a file called server.conf and add some text to it. Make a backup called server.conf.bak using cp. Then make a backup of
+your entire CloudProject folder using cp -r.
+Answer: touch server.conf echo 'server settings here' > server.conf cp server.conf server.conf.bak cp -r CloudProject/ CloudProject_backup/
+ls -l You should see both original and backup files and folders
+Project 7 — Command: mv
+Why this command matters: You rename files and move files between folders constantly on cloud servers. Renaming config files and moving
+log files to archive folders are daily tasks.
+Your Task: Rename server.conf to webserver.conf using mv. Then move webserver.conf into your CloudProject folder.
+Answer: mv server.conf webserver.conf mv webserver.conf CloudProject/ ls CloudProject/ webserver.conf should now appear inside
+CloudProject folder
+Project 8 — Command: rm and rm -rf
+Why this command matters: Cleaning up unnecessary files frees up server disk space. Understanding the difference between rm for files and
+rm -rf for folders is critical — rm -rf cannot be undone!
+Your Task: Create a test file called deleteme.txt. Delete it using rm. Then create a test folder called testfolder with a file inside. Delete the entire
+folder using rm -rf. Always verify before deleting!
+Answer: touch deleteme.txt rm deleteme.txt ls — deleteme.txt should be gone mkdir testfolder touch testfolder/testfile.txt rm -rf testfolder/ ls
+— testfolder should be completely gone WARNING: Always double check what you are deleting!
+Project 9 — Command: cat, head, tail and tail -f
+Why this command matters: Reading log files is one of the most common Cloud Engineer tasks. When a server has an error you read the logs
+to find out what went wrong. tail -f lets you watch logs live as they update.
+Your Task: Create a file with 20 lines of text using a loop. Use head to see first 10 lines. Use tail to see last 10 lines. Use cat to see everything.
+Answer: for i in {1..20}; do echo "Line $i of my test file" >> testfile.txt; done cat testfile.txt — shows all 20 lines head testfile.txt — shows first
+10 lines only tail testfile.txt — shows last 10 lines only tail -f testfile.txt — watches file live (Ctrl+C to stop)
+
+Section 3 — Text Editors
+Project 10 — Command: nano
+Why this command matters: nano is the most beginner friendly text editor on Linux. Cloud Engineers use it to edit configuration files directly on
+servers. It is safe, simple and shows keyboard shortcuts at the bottom.
+Your Task: Open nano and create a file called mynotes.txt. Write three things you learned today. Save and exit. Then verify the content using
+cat.
+Answer: nano mynotes.txt Type your three notes Press Ctrl+X to start exit Press Y to confirm save Press Enter to confirm filename cat
+mynotes.txt Your three notes should appear
+Project 11 — Command: vim — insert, save and exit
+Why this command matters: vim is the most powerful text editor used by professional engineers worldwide. Many servers only have vim
+available. You must know the basics to survive on any Linux server.
+Your Task: Open vim and create a file called vimtest.txt. Enter insert mode. Write five Linux commands you know. Exit insert mode. Save and
+exit vim. Verify with cat.
+Answer: vim vimtest.txt Press i to enter INSERT mode Type your five commands Press Escape to exit insert mode Type :wq and press Enter
+to save and exit cat vimtest.txt Your five commands should appear correctly
+
+Section 4 — Search Commands
+Project 12 — Command: find by name
+Why this command matters: Finding files on a server with hundreds of folders saves enormous time. Cloud Engineers search for config files,
+log files and scripts constantly.
+Your Task: Find all .txt files in your home directory. Then find all files named .bashrc on the entire system.
+Answer: find /home -name '*.txt' Expected: all your .txt files listed find / -name '.bashrc' Expected: /home/ec2-user/.bashrc
+Project 13 — Command: find by size and time
+Why this command matters: When a server runs out of disk space you need to find the largest files immediately. When troubleshooting you
+find recently modified files to see what changed.
+Your Task: Find all files larger than 1MB in your home directory. Then find all files modified in the last 1 day.
+Answer: find /home -size +1M Expected: any files over 1MB shown find /home -mtime -1 Expected: files modified today shown On your EC2
+instance .bash_history and .viminfo will likely appear
+Project 14 — Command: grep basic search
+Why this command matters: Searching inside log files for errors is the number one troubleshooting skill for Cloud Engineers. grep lets you find
+a needle in a haystack of thousands of log lines instantly.
+Your Task: Create a file with mixed content including words like error, warning, success and info. Use grep to find only lines containing error.
+Then use grep -i to find error regardless of case.
+Answer: echo -e 'Server started\nERROR: connection failed\nwarning: low memory\nSuccess: backup done\nerror: disk full' > server.log
+grep 'error' server.log Expected: only lowercase error line shown grep -i 'error' server.log Expected: both ERROR and error lines shown
+Project 15 — Command: grep with line numbers and recursive
+Why this command matters: In production you often have dozens of log files across multiple folders. grep -r searches all of them at once. grep
+-n shows exactly which line the problem is on.
+Your Task: Create two log files in different folders with some error messages. Use grep -rn to search for error across all folders at once.
+Answer: mkdir logs1 logs2 echo 'ERROR: server crash' > logs1/app.log echo 'ERROR: timeout' > logs2/db.log grep -rn 'ERROR' logs1/
+logs2/ Expected output: logs1/app.log:1:ERROR: server crash logs2/db.log:1:ERROR: timeout Line numbers shown with filenames!
+
+Section 5 — sed Commands
+Project 16 — Command: sed replace word
+Why this command matters: Cloud Engineers edit config files on servers constantly. sed lets you change a word in a file without opening it in
+an editor. This is especially powerful in automated scripts.
+Your Task: Create a config file with the word 'development' in it. Use sed to replace every occurrence of development with production. Preview
+first without saving then save with -i.
+Answer: echo -e 'environment=development\nmode=development\nserver=development' > config.txt cat config.txt — see original sed
+'s/development/production/g' config.txt — preview only cat config.txt — still unchanged! sed -i 's/development/production/g' config.txt cat
+config.txt — now shows production everywhere
+Project 17 — Command: sed delete line
+Why this command matters: Removing specific lines from config files and log files is a common server task. You might need to remove old
+entries or clear specific error lines.
+Your Task: Create a file with 5 lines. Delete line 3 using its line number. Then delete any line containing the word remove using the word
+method.
+Answer: echo -e 'line one\nline two\nline three\nline four\nline five' > lines.txt cat lines.txt sed -i '3d' lines.txt cat lines.txt — line three is gone
+echo 'please remove this line' >> lines.txt sed -i '/remove/d' lines.txt cat lines.txt — remove line is gone
+Project 18 — Command: sed add line
+Why this command matters: Adding lines to config files at specific positions is needed when configuring web servers and databases on cloud
+instances.
+Your Task: Create a config file. Add a new line after line 2. Then add a new line before any line containing the word server.
+Answer: echo -e 'setting one\nsetting two\nserver config\nsetting four' > myconfig.txt sed -i '2a # added after line 2' myconfig.txt cat
+myconfig.txt sed -i '/server/i # added before server line' myconfig.txt cat myconfig.txt Both new lines should appear in correct positions
+
+Section 6 — User & Permission Management
+Project 19 — Command: chmod with numbers
+Why this command matters: File permissions protect your server from unauthorised access. Setting wrong permissions is one of the most
+common security mistakes on cloud servers. Your SSH pem file must be 400 or SSH refuses to connect.
+Your Task: Create three files. Set the first to 400 (read only for owner). Set the second to 644 (standard web file). Set the third to 755
+(executable script). Verify all three using ls -l.
+Answer: touch private.pem webfile.html script.sh chmod 400 private.pem chmod 644 webfile.html chmod 755 script.sh ls -l Expected
+permissions: -r-------- private.pem -rw-r--r-- webfile.html -rwxr-xr-x script.sh
+Project 20 — Command: chmod with letters
+Why this command matters: Using letters is faster when you want to add or remove one specific permission without affecting others. Adding
+execute permission to a script is the most common daily use.
+Your Task: Create a shell script file. Try to run it. It will fail because it has no execute permission. Add execute permission using chmod +x.
+Run it again successfully.
+Answer: echo 'echo Hello Cloud Engineer' > myscript.sh ./myscript.sh — Permission denied error! chmod +x myscript.sh ./myscript.sh
+Expected output: Hello Cloud Engineer The script now runs successfully!
+Project 21 — Command: chown
+Why this command matters: When you install a web server like nginx it runs as the nginx user. Your web files must be owned by nginx or the
+web server cannot read them and your website breaks.
+Your Task: Create a file. Check its current owner using ls -l. Change its owner to a different user. Verify the change.
+Answer: touch mywebfile.html ls -l mywebfile.html Owner is currently ec2-user sudo chown root mywebfile.html ls -l mywebfile.html Owner is
+now root sudo chown ec2-user mywebfile.html ls -l mywebfile.html Owner is back to ec2-user
+
+Section 7 — System Management Commands
+Project 22 — Command: ps aux and grep
+Why this command matters: Checking what processes are running on a server is essential for troubleshooting. If a web server is not working
+you first check if its process is actually running.
+Your Task: Run ps aux to see all running processes. Then pipe it with grep to find only the SSH process that is currently running.
+Answer: ps aux Expected: long list of all running processes ps aux | grep ssh Expected: shows only SSH related processes You will see sshd
+process which is your active connection ps aux | grep bash Expected: shows your current bash session
+Project 23 — Command: df -h and free -h
+Why this command matters: Monitoring disk space and memory is a critical daily responsibility. If a server runs out of disk space it crashes.
+Cloud Engineers check these metrics constantly.
+Your Task: Check your disk space using df -h. Check your memory using free -h. Write down the available disk space and available memory.
+Answer: df -h Expected output shows: Filesystem, Size, Used, Available, Use%, Mounted on /dev/xvda1 shows your main disk usage free -h
+Expected output shows: total, used, free, shared, available memory Memory is shown in human readable format like GB and MB
+Project 24 — Command: uname -a
+Why this command matters: Before installing software on a server you must know the kernel version and architecture. Some software only
+works on specific kernel versions or architectures.
+Your Task: Run uname -a to see all system information. Then run uname -r for kernel version only. Then run uname -n for hostname only.
+Answer: uname -a Expected: Linux ip-address kernel-version date architecture uname -r Expected: kernel version number like 6.1.0 uname
+-n Expected: your EC2 instance hostname like ip-172-31-xx-xx
+Project 25 — Command: echo and variables
+Why this command matters: echo is used constantly in shell scripting and server management. Printing variable values helps you verify
+settings are correct before running important commands.
+Your Task: Print your home directory using echo $HOME. Print your username using echo $USER. Create your own variable called
+MYSERVER with a value and print it.
+Answer: echo $HOME Expected: /home/ec2-user echo $USER Expected: ec2-user MYSERVER='aws-production-01' echo $MYSERVER
+Expected: aws-production-01 echo "I am $USER on server $MYSERVER" Expected: I am ec2-user on server aws-production-01
+Project 26 — Command: alias
+Why this command matters: Cloud Engineers create aliases for long commands they type repeatedly. An alias for your SSH connection saves
+you typing the full command every single time.
+Your Task: Create an alias called ll for ls -la. Create an alias called home for cd ~. Use both aliases. Then save them permanently to .bashrc.
+Answer: alias ll='ls -la' ll Expected: full detailed file listing including hidden files alias home='cd ~' home pwd Expected: /home/ec2-user echo
+"alias ll='ls -la'" >> ~/.bashrc echo "alias home='cd ~'" >> ~/.bashrc source ~/.bashrc Aliases now permanent!
+
+Section 8 — Networking Commands
+Project 27 — Command: ping
+Why this command matters: ping is the first command you run when a server cannot connect to the internet or another server. It immediately
+tells you if a connection exists or not.
+Your Task: Ping google.com and count the response times. Then ping a fake address to see what failure looks like. Use Ctrl+C to stop.
+Answer: ping google.com Expected: 64 bytes from google replies with time in ms Press Ctrl+C to stop ping thisaddressdoesnotexist123.com
+Expected: ping fails with unknown host message This confirms the address does not exist
+Project 28 — Command: ifconfig and ip addr show
+Why this command matters: Knowing your server IP address is fundamental. You need it to configure security groups, set up DNS records and
+connect other services to your server.
+Your Task: Run ifconfig to see your network interfaces and IP. Then run ip addr show for the modern version. Find your private IP address in
+both outputs.
+Answer: ifconfig Look for eth0 or ens3 interface Find inet line which shows your private IP Example: inet 172.31.xx.xx ip addr show Same
+information shown in modern format Your private IP is the one starting with 172.31
+Project 29 — Command: netstat -tulpn
+Why this command matters: Checking which ports are open on your server tells you exactly which services are running and listening for
+connections. This is essential for security and troubleshooting.
+Your Task: Run netstat -tulpn to see all open ports. Identify which port SSH is listening on. Identify any other services that are running.
+Answer: netstat -tulpn Expected output columns: Proto Recv-Q Send-Q Local Address State PID/Program Look for: 0.0.0.0:22 — this is SSH
+listening This confirms port 22 is open and accepting connections Any web server would show 0.0.0.0:80 or 0.0.0.0:443
+Project 30 — Command: ssh with pem key
+Why this command matters: Connecting to EC2 instances using SSH is the most fundamental Cloud Engineer skill. You do this multiple times
+every single day.
+Your Task: From your local Git Bash connect to your EC2 instance using your pem key. If already connected disconnect and reconnect to
+practice the full command.
+Answer: First fix pem permissions: chmod 400 Linux-1stkeyPair.pem Then connect: ssh -i 'Linux-1stkeyPair.pem'
+ec2-user@your-ec2-address Breaking down the command: ssh = secure shell command -i = identity file flag 'Linux-1stkeyPair.pem' = your
+private key ec2-user = default AWS Linux username @ = at this server address
+Project 31 — Command: nslookup
+Why this command matters: When DNS is not working for your website nslookup shows you exactly what IP address a domain name resolves
+to. This is a critical debugging tool for Cloud Engineers.
+Your Task: Use nslookup to find the IP address of google.com. Then find the IP address of amazon.com. Compare the results.
+Answer: nslookup google.com Expected output: Server: your DNS server address Name: google.com Address: 142.250.xx.xx nslookup
+amazon.com Expected output: Multiple IP addresses shown amazon.com uses multiple IPs for load balancing!
+
+Section 9 — Package Management
+Project 32 — Command: sudo yum install and status check
+Why this command matters: Installing software on cloud servers is a daily task. Web servers, databases, monitoring tools all need to be
+installed. Amazon Linux uses yum while Ubuntu uses apt.
+Your Task: Update your package list first. Then install the tree command which shows folders in a visual tree format. Test it works by running
+tree on your home directory.
+Answer: sudo yum update -y Expected: package list updates sudo yum install tree -y Expected: tree installs successfully tree /home/ec2-user
+Expected: visual tree of all your files and folders This confirms installation was successful!
+Project 33 — Command: which command
+Why this command matters: Before running any command you should verify it is installed and know exactly where it is located. which tells you
+instantly if a command is available.
+Your Task: Use which to find the location of bash, python3, git and tree commands. If any are not found that means they are not installed.
+Answer: which bash Expected: /bin/bash which python3 Expected: /usr/bin/python3 or not found which git Expected: /usr/bin/git which tree
+Expected: /usr/bin/tree (if you installed it above) Not found message means the software is not installed
+
+Section 10 — Archive & Compression Commands
+Project 34 — Command: tar create and extract
+Why this command matters: Backing up server files and transferring them between servers is a daily Cloud Engineer task. tar is the standard
+Linux archiving tool used on every server worldwide.
+Your Task: Create a folder with three files inside. Archive the entire folder using tar. Delete the original folder. Extract from the archive to verify
+your backup works.
+Answer: mkdir mybackup touch mybackup/file1.txt mybackup/file2.txt mybackup/file3.txt tar -cvf mybackup.tar mybackup/ Expected: see all
+files being archived rm -rf mybackup/ ls — mybackup folder is gone tar -xvf mybackup.tar ls — mybackup folder is back! ls mybackup/ — all
+three files restored!
+Project 35 — Command: tar with compression
+Why this command matters: Compressed archives are much smaller making them faster to transfer between servers. A 100MB folder might
+compress to 20MB saving time and bandwidth costs on AWS.
+Your Task: Create a folder with some content. Create a compressed tar.gz archive. Compare the size of the folder versus the archive using ls
+-lh.
+Answer: mkdir compresstest for i in {1..100}; do echo 'test content for compression' >> compresstest/file$i.txt; done ls -lh compresstest/ —
+see individual file sizes tar -cvzf compresstest.tar.gz compresstest/ ls -lh compresstest.tar.gz — see compressed size The .tar.gz file will be
+significantly smaller!
+Project 36 — Command: zip and unzip
+Why this command matters: zip is compatible with Windows systems making it useful when sharing files with colleagues who use Windows.
+unzip -l lets you verify backup contents without extracting.
+Your Task: Zip your entire home directory work files excluding hidden files and system files. View the contents without extracting. Then extract
+to a test folder.
+Answer: zip -r mywork.zip . --exclude='*.swp' --exclude='.ssh/*' --exclude='.bash*' --exclude='.vim*' unzip -l mywork.zip Expected: list of all
+your work files mkdir extracted_test unzip mywork.zip -d extracted_test/ ls extracted_test/ All your files should appear in the test folder!
+
+Section 11 — Service Management Commands
+Project 37 — Command: systemctl start stop status
+Why this command matters: Managing web server services is a core Cloud Engineer responsibility. When a website goes down you need to
+check, start or restart services immediately.
+Your Task: Install nginx web server. Check its status. Start it. Check status again to confirm it is running. Stop it. Check status to confirm it
+stopped.
+Answer: sudo yum install nginx -y sudo systemctl status nginx Expected: inactive (dead) — not running yet sudo systemctl start nginx sudo
+systemctl status nginx Expected: active (running) — now running! sudo systemctl stop nginx sudo systemctl status nginx Expected: inactive
+(dead) — stopped again
+Project 38 — Command: systemctl enable
+Why this command matters: If your EC2 instance reboots your web server will not start automatically unless you enable it. Forgetting to enable
+a service is a very common and costly mistake.
+Your Task: Enable nginx to start automatically on boot. Then verify it is enabled. Understand the difference between started and enabled.
+Answer: sudo systemctl enable nginx Expected: Created symlink message confirming it is enabled sudo systemctl status nginx Look for:
+enabled in the loaded line This means nginx will start automatically every time server reboots sudo systemctl disable nginx Expected:
+Removed symlink message Now nginx will NOT start on reboot
+
+BONUS — Full Cloud Engineer Server Setup Simulation
+This bonus project combines every command you have learned into one realistic simulation of setting up a web server on AWS EC2 — exactly
+what you will do on your first day as a Cloud Engineer.
+Your Task:
+MISSION: Set up and secure a complete web server environment
+STEP 1 — Check your server
+uname -a — check kernel version
+df -h — check disk space
+free -h — check memory
+STEP 2 — Create organised folder structure
+mkdir -p /home/ec2-user/webapp/html
+mkdir -p /home/ec2-user/webapp/logs
+mkdir -p /home/ec2-user/webapp/config
+mkdir -p /home/ec2-user/webapp/backup
+STEP 3 — Create web files
+echo 'My Cloud Server' > /home/ec2-user/webapp/html/index.html
+echo 'server_name=mywebserver' > /home/ec2-user/webapp/config/server.conf
+echo 'environment=production' >> /home/ec2-user/webapp/config/server.conf
+STEP 4 — Set correct permissions
+chmod 644 /home/ec2-user/webapp/html/index.html
+chmod 600 /home/ec2-user/webapp/config/server.conf
+chmod 755 /home/ec2-user/webapp/
+ls -la /home/ec2-user/webapp/
+STEP 5 — Search and verify content
+grep 'production' /home/ec2-user/webapp/config/server.conf
+
+find /home/ec2-user/webapp -name '*.html'
+find /home/ec2-user/webapp -name '*.conf'
+STEP 6 — Install and start web server
+sudo yum install nginx -y
+sudo systemctl start nginx
+sudo systemctl enable nginx
+sudo systemctl status nginx
+STEP 7 — Check server is listening
+netstat -tulpn | grep nginx
+STEP 8 — Create backup archive
+tar -cvzf /home/ec2-user/webapp_backup.tar.gz /home/ec2-user/webapp/
+ls -lh /home/ec2-user/webapp_backup.tar.gz
+STEP 9 — Verify backup
+tar -xvzf /home/ec2-user/webapp_backup.tar.gz -C /tmp/
+ls /tmp/home/ec2-user/webapp/
+STEP 10 — Create useful aliases
+echo "alias webstatus='sudo systemctl status nginx'" >> ~/.bashrc
+echo "alias weblogs='tail -f /var/log/nginx/error.log'" >> ~/.bashrc
+echo "alias backup='tar -cvzf webapp_backup.tar.gz /home/ec2-user/webapp/'" >> ~/.bashrc
+source ~/.bashrc
+TEST YOUR ALIASES:
+webstatus — should show nginx status
+Expected Final Result:
+nginx is installed and running nginx is enabled to start on reboot All web files have correct permissions Config file is secure with 600
+permissions Backup archive exists and is verified Three useful aliases are saved permanently You just set up a production web server like a
+real Cloud Engineer!
