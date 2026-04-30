@@ -11,8 +11,11 @@
 ############
 echo "Print the Disk Space"
 
-# set parameter sed debug mode to explain which command does wha
-#command set -x #debu mode 
+# set parameter sets debug mode to explain which command does wha
+set -x #debug mode
+set -e # exits the script when there is a error but this will not wrok if there is |=pipe 
+
+set -o # pipefile |= pipe that takes results from anoher command so when set -o is added script will not execute the last command after pipe if there is any wrong command   
 df -h
 #printing/showing disk space
 echo "Print Memory"
@@ -26,4 +29,4 @@ echo "Print Resources"
 nproc
 #printing resources & process 
 
-echo "today's Date is $(Date)"
+
