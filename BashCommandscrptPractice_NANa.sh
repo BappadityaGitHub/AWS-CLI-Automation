@@ -50,7 +50,7 @@ echo "Here are the Log files" "$LOG_FILE_NAMES"
 
 echo "which log file you want to analyse"
 
-read -p "enter log file name" LOG_FILE_NAME :  
+read -p "enter log file name" LOG_FILE_NAME   
 
 #########
 #Array Variable - that can have multiple optional choice 
@@ -60,14 +60,14 @@ ERROR_PATTERN=("ERROR" "FATAL" "CRITICAL") # ***TO access from this variable sys
 
 echo " searching error logs "
 
-grep "$0" $LOG_FILE_PATH/$LOG_FILE_NAME #to find ERROR files
+grep "$ERROR_PATTERN" $LOG_FILE_PATH/$LOG_FILE_NAME #to find ERROR files
 
 echo -e "\n searching number of error and fatal logs "
 
-grep -c "${ERROR_PATTERNS[0]}" "$LOG_FILE_PATH/$LOG_FILE_NAME" # finding number of ERROR files
+grep -c "${ERROR_PATTERN[0]}" "$LOG_FILE_PATH/$LOG_FILE_NAME" # finding number of ERROR files ###**** -c after grep is for count off error/fatal/critical log #####
 
-grep -c "${ERROR_PATTERNS[0]}" "$LOG_FILE_PATH/$LOG_FILE_NAME" #finding number of FATAL files
+grep -c "${ERROR_PATTERN[0]}" "$LOG_FILE_PATH/$LOG_FILE_NAME" #finding number of FATAL files
 
-grep -c "${ERROR_PATTERNS[0]}" "$LOG_FILE_PATH/$LOG_FILE_NAME" # finding number of FATAL files
+grep -c "${ERROR_PATTERN[0]}" "$LOG_FILE_PATH/$LOG_FILE_NAME" # finding number of FATAL files
 
-grep -c "${ERROR_PATTERNS[0]}" "$LOG_FILE_PATH/$LOG_FILE_NAME" # finding number of critilal 
+grep -c "${ERROR_PATTERN[0]}" "$LOG_FILE_PATH/$LOG_FILE_NAME" # finding number of critilal 
