@@ -1,0 +1,43 @@
+If curl is a "browser without a screen," then wget is your "automated download manager."
+While curl is better for talking to servers (APIs), wget is built specifically for downloading files and websites reliably, even if your internet is flaky. [1, 2] 
+Here is the "easier" breakdown of why and how to use it:
+## The "Why" (Wget vs. Curl)
+
+* Wget is more robust: If your connection drops, wget will automatically keep retrying until the file is finished.
+* Wget can "Mirror": It can download an entire website (all pages, images, and folders) in one go, which curl cannot do easily.
+* Wget saves to a file by default: You don't need extra flags just to save a download. [1, 3, 4, 5, 6, 7] 
+
+------------------------------
+## The Only 4 Commands You Need [7] 
+
+   1. Standard Download
+   Just like a normal download button. It saves the file to your current folder.
+   wget https://example.com
+   2. Pick a New Name
+   If you want to name the file something specific (like my_video.mp4) instead of the website's default name.
+   wget -O my_video.mp4 https://example.com
+   3. Resume a Failed Download
+   If your computer crashed at 90%, this starts right where you left off.
+   wget -c https://example.com
+   4. Download a Whole Website (Mirroring)
+   This follows every link on a page and downloads everything for offline viewing.
+   wget -m https://website.com
+   (Careful with this one—it can download a lot of data!) [3, 8, 9, 10, 11, 12] 
+
+------------------------------
+## Quick Cheat Sheet
+
+| Goal [1, 3, 10, 11, 13] | Flag |
+|---|---|
+| Resume interrupted file | -c (Continue) |
+| Quiet mode (no text on screen) | -q (Quiet) |
+| Limit download speed | --limit-rate=200k |
+| Background download | -b (Background) |
+
+Which one should you use?
+
+* Use curl if you are a developer testing a specific request or an API.
+* Use wget if you just want to download a large file or a whole directory and not worry about it. [2, 14, 15, 16] 
+
+Do you have a large file or a specific site you're trying to grab right now?
+

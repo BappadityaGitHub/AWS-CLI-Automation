@@ -1,0 +1,41 @@
+find / -name txt
+
+If curl and wget are for getting things from the web, find is for searching through everything on your own computer.
+It's essentially a high-powered "Search Bar" for your terminal. [1, 2] 
+## The Basic Formula
+
+find [where to look] -name "what to look for"
+
+## The Most Helpful Commands
+
+   1. Search by Name
+   Find a specific file anywhere in your current folder and its subfolders:
+   find . -name "my_file.txt"
+   (The . means "start here.")
+   2. Case-Insensitive Search
+   If you aren't sure if it was capitalized (like Report.txt vs report.txt):
+   find . -iname "report.txt"
+   3. Search by File Type
+   Find only folders (directories) with a certain name:
+   find . -type d -name "work"
+   Or only regular files:
+   find . -type f -name "*.jpg"
+   4. Search by Size (The "Space-Saver")
+   Find files larger than 100MB to see what's eating your disk space:
+   find . -size +100M
+   5. Search by Time
+   Find files modified in the last 24 hours:
+   find . -mtime -1 [1, 3, 4, 5, 6] 
+
+------------------------------
+## When to use "Find" vs "Grep"
+It's easy to mix these up, but here is the rule of thumb: [7, 8] 
+
+* Use find when you are looking for the file itself (based on its name, size, or date).
+* Use grep when you are looking for text inside a file. [1, 2, 3, 7, 9] 
+
+Quick Example:
+If you want to find all .log files and search them for the word "Error":
+find . -name "*.log" -exec grep "Error" {} \; [3, 10] 
+Are you trying to track down a lost file, or are you looking to clean up some space on your drive?
+
