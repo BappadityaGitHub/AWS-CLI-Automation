@@ -1,9 +1,13 @@
 #!/bin/bash
+echo "analysing log files"
+echo "=================================" 
+echo -e"\n finding List of log files in updated in last 24 hours"
 
 find . -name "*.log" -mtime -1 # Finding which files have been updated in last 1 day 
 # imaging log file name application.log and system.log and i have to find error or fatal or crital logs 
-#
-grep "ERROR" application.log #to find ERROR files 
+echo " searching error logs " 
+grep "ERROR" application.log #to find ERROR files
+echo -e"\n searching number of error and fatal logs " 
 grep -c "ERROR" application.log # finding number of ERROR files
 grep -c "FATAL" application.log #finding number of FATAL files
 grep -c "FATAL" system.log # finding number of FATAL files
