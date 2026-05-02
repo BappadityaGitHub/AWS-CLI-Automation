@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>🛡️ Production Mastery Dojo: Career Edition</title>
+    <style>
+        :root { --main: #1a1a2e; --accent: #0f3460; --text: #e94560; --light: #f1f1f1; --code-bg: #16213e; }
+        body { font-family: 'Inter', system-ui, sans-serif; background: var(--main); color: var(--light); margin: 0; padding: 20px; line-height: 1.6; }
+        .dashboard { max-width: 1000px; margin: auto; background: var(--accent); padding: 30px; border-radius: 15px; box-shadow: 0 20px 50px rgba(0,0,0,0.5); border: 1px solid #16213e; }
+        h1 { text-align: center; color: var(--text); text-transform: uppercase; letter-spacing: 2px; border-bottom: 2px solid var(--text); padding-bottom: 10px; }
+        .status-bar { display: flex; justify-content: space-between; background: #000; padding: 15px; border-radius: 8px; margin: 20px 0; font-family: 'Courier New', monospace; border: 1px solid var(--text); }
+        .terminal { background: var(--code-bg); padding: 20px; border-radius: 8px; border-left: 5px solid var(--text); margin: 20px 0; position: relative; }
+        .terminal::before { content: "EC2-REMOTE-SESSION:~/AWS-CLI-Automation$"; color: #4ecca3; font-weight: bold; display: block; margin-bottom: 10px; }
+        .options { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 20px; }
+        button { padding: 15px; background: #16213e; color: white; border: 1px solid var(--text); border-radius: 5px; cursor: pointer; font-weight: bold; transition: 0.3s; }
+        button:hover { background: var(--text); color: white; transform: translateY(-2px); }
+        .feedback { display: none; margin-top: 20px; padding: 20px; border-radius: 8px; font-weight: bold; }
+        .success { background: #1b4332; border: 1px solid #2d6a4f; color: #95d5b2; }
+        .fail { background: #5a1818; border: 1px solid #a4161a; color: #ffb3b3; }
+        .cheat-sheet-btn { width: 100%; margin-top: 20px; background: #4ecca3; color: #1a1a2e; }
+    </style>
+</head>
+<body>
+
+<div class="dashboard">
+    <h1>Career Production Toolkit</h1>
+    <div class="status-bar">
+        <span>CURRENT_MODULE: Topics_6_7_8</span>
+        <span>SYSTEM_STATUS: <span id="score">0</span>% SYNCHRONIZED</span>
+    </div>
+
+    <div id="game-container">
+        <h2 id="title">Level 1: The Identity Crisis ($0 vs $?)</h2>
+        <p id="desc">You just finished a script. You need to know if it SUCCEEDED (Receipt) or what its NAME is (Identity). Identify the correct command:</p>
+        
+        <div class="terminal">
+            <code id="code-snippet">./analyse_logs.sh<br>echo "Task Grade: [???]"</code>
+        </div>
+
+        <div class="options" id="btn-grid">
+            <button onclick="check(0)">echo $0</button>
+            <button onclick="check(1)">echo $?</button>
+            <button onclick="check(0)">echo $1</button>
+            <button onclick="check(0)">ls -l</button>
+        </div>
+
+        <div id="feedback" class="feedback"></div>
+        <button id="next-btn" style="display:none; width:100%; margin-top:20px;" onclick="nextLevel()">PROCEED TO NEXT TASK ➔</button>
+    </div>
+</div>
+
+<script>
+    let lvl = 0;
+    let score = 0;
+
+    const data = [
+        {
+            t: "Level 1: Identity vs Grade",
+            d: "Topic 8: In production, every command leaves a 'Receipt' (Exit Status). What symbol holds it?",
+            c: "./analyse_logs.sh\necho \"The Grade was: [???]\"",
+            o: ["echo $0", "echo $?", "echo $1", "echo 0"],
+            a: 1,
+            msg: "Senior Mentor says: $0 is the Name (Identity). $? is the Question (Did it work?). 0 = Zero Errors (Success)!"
+        },
+        {
+            t: "Level 2: The Array Plucker",
+            d: "Topic 6: You have an array ERROR_PATTERN=('ERROR' 'FATAL'). How do you search for 'FATAL' specifically?",
+            c: "grep [???] application.log",
+            o: ["$ERROR_PATTERN", "${ERROR_PATTERN}", "${ERROR_PATTERN[1]}", "${ERROR_PATTERN[0]}"],
+            a: 2,
+            msg: "Senior Mentor says: Arrays start at 0. ${ERROR_PATTERN[1]} plucks the 2nd item ('FATAL')."
+        },
+        {
+            t: "Level 3: Silent Redirection",
+            d: "Topic 7: You want to hide BOTH the Success and the Errors from the screen while checking a site.",
+            c: "ping -c 1 google.com [???]",
+            o: ["> /dev/null", "2> /dev/null", "> /dev/null 2>&1", "| grep OK"],
+            a: 2,
+            msg: "Senior Mentor says: > /dev/null hides Good News (1). 2>&1 makes Bad News (2) follow it to the Black Hole."
+        },
+        {
+            t: "Level 4: The Space Trap",
+            d: "Topic 6: Your path is 'C:/Users/Me/My Project/log.txt'. Why will this break without quotes?",
+            c: "ls $LOG_PATH",
+            o: ["Wrong Folder", "Space creates two arguments", "Wrong Sign", "Missing Pipe"],
+            a: 1,
+            msg: "Senior Mentor says: Bash thinks 'My' and 'Project' are two separate things. Always use \"$QUOTES\"!"
+        },
+        {
+            t: "Level 5: Industry Disk Standard",
+            d: "Topic 7: Which 'df' flag is mandatory in production to prevent multi-line output breaking your script?",
+            c: "DISK=$(df [???] / | awk 'NR==2 {print $5}')",
+            o: ["-h", "-P", "-k", "-v"],
+            a: 1,
+            msg: "Senior Mentor says: -P (POSIX) ensures the output stays on one line so your 'awk' column count doesn't break."
+        }
+    ];
+
+    function check(idx) {
+        const f = document.getElementById('feedback');
+        if(idx === data[lvl].a) {
+            score += 20;
+            f.innerHTML = "✅ PRODUCTION READY! " + data[lvl].msg;
+            f.className = "feedback success";
+        } else {
+            f.innerHTML = "❌ SYSTEM ERROR! " + data[lvl].msg;
+            f.className = "feedback fail";
+        }
+        f.style.display = "block";
+        document.getElementById('score').innerText = score;
+        document.getElementById('next-btn').style.display = "block";
+    }
+
+    function nextLevel() {
+        lvl++;
+        if(lvl < data.length) {
+            document.getElementById('title').innerText = data[lvl].t;
+            document.getElementById('desc').innerText = data[lvl].d;
+            document.getElementById('code-snippet').innerText = data[lvl].c;
+            const grid = document.getElementById('btn-grid');
+            grid.innerHTML = "";
+            data[lvl].o.forEach((opt, i) => {
+                const b = document.createElement('button');
+                b.innerText = opt;
+                b.onclick = () => check(i);
+                grid.appendChild(b);
+            });
+            document.getElementById('feedback').style.display = "none";
+            document.getElementById('next-btn').style.display = "none";
+        } else {
+            document.getElementById('game-container').innerHTML = "<h2 style='text-align:center;'>🚀 PRODUCTION CERTIFIED!</h2><p style='text-align:center;'>You have fully collated the logic of Topics 6, 7 & 8. Save this as your lifelong manual.</p><button onclick='location.reload()' style='width:100%'>REBOOT TRAINING</button>";
+        }
+    }
+</script>
+</body>
+</html>
+

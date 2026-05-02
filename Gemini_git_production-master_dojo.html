@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Production Mastery Dojo | Topics 6-8</title>
+    <style>
+        :root { --primary: #2980b9; --success: #27ae60; --error: #c0392b; --dark: #2c3e50; --bg: #f4f7f6; }
+        body { font-family: 'Segoe UI', sans-serif; background-color: var(--bg); color: var(--dark); margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center; }
+        .container { max-width: 800px; width: 100%; background: white; padding: 30px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+        .header { text-align: center; border-bottom: 3px solid var(--primary); margin-bottom: 20px; }
+        .stats { display: flex; justify-content: space-around; background: var(--dark); color: white; padding: 10px; border-radius: 8px; margin-bottom: 20px; }
+        .cheat-sheet { background: #eef; border: 1px solid var(--primary); padding: 15px; border-radius: 8px; margin-bottom: 20px; display: none; }
+        .level-card { border: 2px solid #ddd; padding: 20px; border-radius: 10px; margin-bottom: 20px; }
+        .code-box { background: #272822; color: #f8f8f2; padding: 15px; border-radius: 6px; font-family: 'Courier New', monospace; margin: 15px 0; overflow-x: auto; }
+        .options { display: grid; grid-template-columns: 1fr; gap: 10px; }
+        button { padding: 12px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; transition: 0.3s; background: #ecf0f1; color: var(--dark); }
+        button:hover { background: #bdc3c7; }
+        .feedback { margin-top: 20px; padding: 15px; border-radius: 6px; display: none; }
+        .correct { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .wrong { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+        .btn-main { background: var(--primary); color: white; margin-top: 10px; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <h1>🛡️ Production Mastery Dojo</h1>
+        <p>Mastering Topics 6, 7 & 8: Debugging, Redirection, and Logic</p>
+    </div>
+
+    <div class="stats">
+        <span>Level: <b id="level-num">1</b> / 5</span>
+        <span>Score: <b id="score">0</b></span>
+    </div>
+
+    <button class="btn-main" onclick="toggleCheatSheet()">📋 Toggle Cheat Sheet</button>
+    <div id="cheat-sheet" class="cheat-sheet">
+        <b>Topic 6 (Debugging):</b> Always use <code>"$VAR"</code> for paths. <code>${ARR[0]}</code> for arrays.<br>
+        <b>Topic 7 (Redirection):</b> <code>> /dev/null</code> hides success; <code>2>&1</code> merges errors.<br>
+        <b>Topic 8 (Logic):</b> <code>$0</code> = Name. <code>$?</code> = Grade (0 is Success!).
+    </div>
+
+    <div id="game-area">
+        <div class="level-card">
+            <h3 id="question-text">Level 1: The Identity Crisis</h3>
+            <p>You want to check if your script <code>disk_check.sh</code> finished successfully. Which command tells you the "Grade"?</p>
+            <div class="code-box" id="code-display">
+./disk_check.sh<br>
+echo "The result is: ???"
+            </div>
+            <div class="options" id="options-area">
+                <button onclick="checkAnswer(0)">echo $0</button>
+                <button onclick="checkAnswer(1)">echo $?</button>
+                <button onclick="checkAnswer(0)">echo $1</button>
+            </div>
+        </div>
+        <div id="feedback" class="feedback"></div>
+        <button id="next-btn" class="btn-main" style="display:none;" onclick="nextLevel()">Next Level ➔</button>
+    </div>
+</div>
+
+<script>
+    let currentLevel = 0;
+    let score = 0;
+
+    const levels = [
+        {
+            q: "Level 1: The Identity Crisis",
+            p: "You want to check if your script finished successfully. Which symbol gives you the 'Grade' (0 or 1)?",
+            code: "./disk_check.sh\necho 'The result is: ???'",
+            options: ["echo $0", "echo $?", "echo $1"],
+            correct: 1,
+            hint: "Mentor's Trick: $0 is the Name (Identity), $? is the Question (Did it work?)."
+        },
+        {
+            q: "Level 2: The Silent Scout",
+            p: "In production, you want to check if 'google.com' is UP without showing any messy text on the screen. Fix the plumbing:",
+            code: "ping -c 1 google.com ???",
+            options: ["> /dev/null 2>&1", "2> /dev/null", "| grep OK"],
+            correct: 0,
+            hint: "Mentor's Trick: You must hide both the Good News (1) and the Bad News (2) in the Black Hole."
+        },
+        {
+            q: "Level 3: The Variable Trap",
+            p: "Your Windows path has a space: 'C:/Log Files/app.log'. Why will this command fail?",
+            code: "ls $LOG_PATH",
+            options: ["Missing a pipe", "Variable needs double quotes", "Wrong folder"],
+            correct: 1,
+            hint: "Mentor's Trick: Always wrap variables in \"$QUOTES\" so Bash treats the space as part of the name."
+        },
+        {
+            q: "Level 4: The Array Plucker",
+            p: "You defined ERROR_PATTERN=('ERROR' 'FATAL'). How do you specifically search for 'FATAL' (the second item)?",
+            code: "grep ??? application.log",
+            options: ["$ERROR_PATTERN", "${ERROR_PATTERN[0]}", "${ERROR_PATTERN[1]}"],
+            correct: 2,
+            hint: "Mentor's Trick: Arrays start counting at 0. So 0=ERROR, 1=FATAL."
+        },
+        {
+            q: "Level 5: The Zero-Error Principle",
+            p: "If a command finishes and finds ZERO problems, what is the value of $??",
+            code: "ls AWS-CLI-Automation/\necho $?",
+            options: ["1", "0", "Success"],
+            correct: 1,
+            hint: "Mentor's Trick: 0 means 'Zero obstacles found'. Anything else is an Error ID."
+        }
+    ];
+
+    function toggleCheatSheet() {
+        const sheet = document.getElementById('cheat-sheet');
+        sheet.style.display = sheet.style.display === 'block' ? 'none' : 'block';
+    }
+
+    function checkAnswer(idx) {
+        const feedback = document.getElementById('feedback');
+        const nextBtn = document.getElementById('next-btn');
+        if (idx === levels[currentLevel].correct) {
+            score += 20;
+            feedback.innerHTML = "✅ <b>Correct!</b> " + levels[currentLevel].hint;
+            feedback.className = "feedback correct";
+        } else {
+            feedback.innerHTML = "❌ <b>Wrong.</b> " + levels[currentLevel].hint;
+            feedback.className = "feedback wrong";
+        }
+        feedback.style.display = "block";
+        nextBtn.style.display = "block";
+        document.getElementById('score').innerText = score;
+    }
+
+    function nextLevel() {
+        currentLevel++;
+        if (currentLevel < levels.length) {
+            document.getElementById('level-num').innerText = currentLevel + 1;
+            document.getElementById('question-text').innerText = levels[currentLevel].q;
+            document.getElementById('code-display').innerText = levels[currentLevel].code;
+            const optionsArea = document.getElementById('options-area');
+            optionsArea.innerHTML = "";
+            levels[currentLevel].options.forEach((opt, i) => {
+                const btn = document.createElement('button');
+                btn.innerText = opt;
+                btn.onclick = () => checkAnswer(i);
+                optionsArea.appendChild(btn);
+            });
+            document.getElementById('feedback').style.display = "none";
+            document.getElementById('next-btn').style.display = "none";
+        } else {
+            document.getElementById('game-area').innerHTML = "<h2>🏆 Dojo Mastered!</h2><p>Your final score: " + score + "/100</p><button class='btn-main' onclick='location.reload()'>Restart Training</button>";
+        }
+    }
+</script>
+
+</body>
+</html>
+
