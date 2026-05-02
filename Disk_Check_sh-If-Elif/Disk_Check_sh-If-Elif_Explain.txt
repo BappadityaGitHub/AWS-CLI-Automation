@@ -1,0 +1,84 @@
+#!/bin/bash
+
+# 1. Capture and Clean the Data
+# Use -P for POSIX format to prevent long names from breaking the line
+DISK=$(df -hP / | awk 'NR==2 {print $5}' | tr -d '%')
+
+# 2. Threshold Logic
+if [ "$DISK" -gt 90 ]; then
+    echo "CRITICAL: $DISK%"
+elif [ "$DISK" -gt 80 ]; then
+    echo "WARNING: $DISK%"
+elif [ "$DISK" -gt 70 ]; then
+    echo "NOTICE: $DISK%"
+else
+    echo "OK: $DISK%"
+fi
+
+
+
+
+
+
+
+This is the "engine" of your script. To understand it, think of it like a factory assembly line where a raw product goes in one side and a finished number comes out the other.
+## 1. The Anatomy of the Command
+The symbol | is called a Pipe. It takes the output of the command on the left and "pipes" it into the command on the right.
+## Step 1: df -hP / (The Input)
+
+* df: "Disk Free." It reports file system disk space usage.
+* -h: "Human-readable" (converts bytes to GB/MB).
+* -P: Production Standard. It forces "POSIX" output format. Without this, if your partition name is too long, it breaks into two lines and ruins your counting.
+* /: Specifically looks at the root folder (where your OS lives).
+
+## Step 2: awk 'NR==2 {print $5}' (The Filter)
+
+* awk: A powerful text-processing tool.
+* NR==2: "Number of Record is 2." This tells the computer: "Ignore the header (line 1), only look at line 2."
+* {print $5}: "Show me the 5th column." In the df output, the 5th column is the Use%.
+
+## Step 3: tr -d '%' (The Cleaner)
+
+* tr: "Translate" or delete characters.
+* -d: "Delete."
+* '%': This removes the percent symbol.
+* Why? Because Bash cannot compare 85% to 90. It can only compare 85 to 90. We strip the symbol to turn it into a pure number.
+
+------------------------------
+## 2. The Grammar & Symbols (Your Master Guide)
+To take on any challenge, you must master these "Grammar Rules":
+
+* $( ... ) (Command Substitution):
+* Rule: This tells Bash: "Run the command inside the parentheses first, and save the result into the variable DISK."
+   * Best Practice: Never use backticks `...`. They are old and hard to read. Always use $( ).
+* [ ] (Test Brackets):
+* Rule: These are actually a command! They evaluate if a condition is true or false.
+   * Best Practice: Always leave a space after the first [ and before the last ].
+   * Bad: [$DISK -gt 90] (Will fail)
+   * Good: [ "$DISK" -gt 90 ] (Correct)
+* " " (Double Quotes):
+* Rule: Always wrap your variables in quotes.
+   * Best Practice: If $DISK is empty for some reason, [ -gt 90 ] will crash the script. [ "" -gt 90 ] is much safer.
+
+------------------------------
+## 3. Career Revision: Production Cheat Sheet
+Add this to your MASTER_TOOL.md as your "Scripting Logic" section.
+
+| Symbol / Command | Meaning | Production Tip |
+|---|---|---|
+| | (Pipe) | Pass data to next tool. | Chain small tools together to do big jobs. |
+| awk | Column selector. | Use $1, $2, etc., to grab specific data. |
+| tr -d | Character remover. | Use it to clean symbols ($, %, ,) before math. |
+| -gt / -lt | Greater than / Less than. | Use these for numbers. Use == or != for text. |
+
+## 🚀 Challenge Prep: How to tackle any log/disk task
+Whenever you need to extract data, follow this 3-Step Mental Model:
+
+   1. Generate: What command shows the data? (df, ls, cat log.txt).
+   2. Locate: Which line and which column is the data in? (Use awk).
+   3. Refine: Do I need to remove symbols to make it a number? (Use tr).
+
+Daily Routine Check: Before you save this script into your AWS-CLI-Automation folder, run git --version and git pull.
+Now that you understand the grammar, do you want to try writing a command that finds the total number of lines in your application.log using these same symbols?
+
+
